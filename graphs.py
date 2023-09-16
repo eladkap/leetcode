@@ -1,103 +1,119 @@
-VISITED = '!'
+class Vertex(object):
+    def __init__(self, value: str):
+        self.value = value
+        self.visited = False
+
+    def __str__(self):
+        return self.value
 
 
-def scan_ship_dfs(B: list, i: int, j: int) -> int:
-    n = len(B)
-    m = len(B[0])
+class Edge(object):
+    def __init__(self, v1: Vertex, v2: Vertex, weight: int):
+        self.v1 = v1
+        self.v2 = v2
+        self.weight = weight
 
-    count = 0
-    stack = [[i, j]]
-    while len(stack) > 0:
-        v = stack.pop()
-        i, j = v[0], v[1]
-
-        if B[i][j] == VISITED:
-            continue
-
-        if B[i][j] == '.':
-            continue
-
-        # visit cell
-        B[i][j] = VISITED
-        count += 1
-
-        # go left
-        if j - 1 >= 0:
-            stack.append([i, j - 1])
-
-        # go right
-        if j + 1 < m:
-            stack.append([i, j + 1])
-
-        # go up
-        if i - 1 >= 0:
-            stack.append([i - 1, j])
-
-        # go down
-        if i + 1 < n:
-            stack.append([i + 1, j])
-
-    return count
+    def __str__(self):
+        return f'{self.v1}-{self.v2}'
 
 
-def scan_ship(B: list, i: int, j: int, count_ref) -> None:
-    n = len(B)
-    m = len(B[0])
+class Graph(object):
+    def __init__(self):
+        self.vertices = dict()
+        self.edges = []
 
-    if i < 0 or j < 0 or i >= n or j >= m:
-        return
+    def __str__(self):
+        s = ''
+        s += f"V=[{','.join([str(v) for v in self.vertices])}]\n"
+        s += f"E=[{','.join([str(e) for e in self.edges])}]\n"
+        return s
 
-    if B[i][j] == VISITED or B[i][j] == '.':
-        return
+    def add_vertex(self, v: Vertex):
+        self.vertices[v] = set()
 
-    # visit cell
-    B[i][j] = VISITED
-    count_ref[0] += 1
+    def add_vertices(self, vertices: list):
+        for vertex in vertices:
+            self.add_vertex(vertex)
 
-    scan_ship(B, i, j - 1, count_ref)
-    scan_ship(B, i, j + 1, count_ref)
-    scan_ship(B, i - 1, j, count_ref)
-    scan_ship(B, i + 1, j, count_ref)
+    def add_edge(self, edge: Edge):
+        self.vertices[edge.v1].add(edge.v2)
+        self.vertices[edge.v2].add(edge.v1)
+        self.edges.append(edge)
 
+    def show(self):
+        for v in self.vertices:
+            print(f"{v}: [{','.join([str(u) for u in self.vertices[v]])}]")
 
-def find_ships(B: list) -> dict:
-    d = {
-        'P': 0,
-        'S': 0,
-        'D': 0
-    }
-    n = len(B)
-    m = len(B[0])
+    def set_all_visited(self, visited: bool):
+        for v in self.vertices:
+            v.visited = visited
 
-    for i in range(n):
-        for j in range(m):
-            if B[i][j] == '.' or B[i][j] == VISITED:
+    def bfs(self, start: Vertex):
+        queue = []
+        queue.append(start)
+        res = []
+        self.set_all_visited(False)
+        while len(queue) > 0:
+            v = queue.pop(0)
+            if v.visited:
                 continue
-            count_ref = [0]
-            scan_ship(B, i, j, count_ref)
-            count = count_ref[0]
-            if count == 1:
-                d['P'] += 1
-            elif count == 2:
-                d['S'] += 1
-            elif count == 3:
-                d['D'] += 1
+            v.visited = True
+            res.append(str(v))
+            for u in self.vertices[v]:
+                queue.append(u)
+        return res
 
-    return d
+    def dfs(self, start: Vertex):
+        stack = []
+        stack.append(start)
+        res = []
+        self.set_all_visited(False)
+        while len(stack) > 0:
+            v = stack.pop(-1)
+            if v.visited:
+                continue
+            v.visited = True
+            res.append(str(v))
+            for u in self.vertices[v]:
+                stack.append(u)
+        return res
 
 
 if __name__ == '__main__':
-    b = [
-        '##......',
-        '#.......',
-        '..###..#',
-        '#.....#.',
-        '...#..#.'
-    ]
+    G = Graph()
 
-    B = []
-    for line in b:
-        B.append(list(line))
+    a = Vertex('A')
+    b = Vertex('B')
+    c = Vertex('C')
+    d = Vertex('D')
+    e = Vertex('E')
+    f = Vertex('F')
+    g = Vertex('G')
 
-    d = find_ships(B)
-    print(d)
+    ac = Edge(a, c, 1)
+    ab = Edge(a, b, 1)
+    cd = Edge(c, d, 2)
+    bd = Edge(b, d, 3)
+    be = Edge(b, e, 2)
+    de = Edge(d, e, 3)
+    ef = Edge(e, f, 4)
+    eg = Edge(e, g, 2)
+
+    G.add_vertices([a, b, c, d, e, f, g])
+
+    G.add_edge(ab)
+    G.add_edge(ac)
+    G.add_edge(bd)
+    G.add_edge(cd)
+    G.add_edge(be)
+    G.add_edge(de)
+    G.add_edge(ef)
+    G.add_edge(eg)
+
+    G.show()
+
+    res = G.bfs(a)
+    print(res)
+
+    res = G.dfs(a)
+    print(res)

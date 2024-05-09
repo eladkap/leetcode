@@ -1,3 +1,6 @@
+import json
+
+
 class TreeNode:
     def __init__(self, value):
         self.value = value
@@ -11,7 +14,7 @@ class TreeNode:
 
 
 class BinaryTree:
-    def __init__(self, root: TreeNode):
+    def __init__(self, root: TreeNode = None):
         self.root = root
 
     def perorder_scan(self):
@@ -77,6 +80,49 @@ class BinaryTree:
 
         return get_height(self.root)
 
+    def serialize(self):
+        d = {}
+        queue = []
+        queue.append(self.root)
+        while len(queue) > 0:
+            node = queue.pop(0)
+            if not node:
+                continue
+            val = str(node.value)
+            d[val] = {'l': '-', 'r': '-'}
+            if node.left:
+                d[val]['l'] = str(node.left.value)
+
+            if node.right:
+                d[val]['r'] = str(node.right.value)
+
+            queue.append(node.left)
+            queue.append(node.right)
+        return d
+
+
+def deserialize(json_file: str) -> BinaryTree:
+    with open(json_file, 'r') as fp:
+        tree_dict = json.load(fp)
+
+    values_set = set()
+    nodes_dict = {node_value: TreeNode(node_value) for node_value in tree_dict.keys()}
+
+    tree = BinaryTree()
+    for i, node_value in enumerate(tree_dict.keys()):
+        if i == 0:
+            tree.root = nodes_dict[node_value]
+
+        node = nodes_dict[node_value]
+        left_value = tree_dict[node_value]['l']
+        right_value = tree_dict[node_value]['r']
+        if left_value != '-':
+            node.left = nodes_dict[left_value]
+        if right_value != '-':
+            node.right = nodes_dict[right_value]
+
+    return tree
+
 
 if __name__ == '__main__':
     a = TreeNode(1)
@@ -86,16 +132,20 @@ if __name__ == '__main__':
     e = TreeNode(5)
     f = TreeNode(6)
     g = TreeNode(7)
-    h = TreeNode(8)
-    i = TreeNode(9)
     a.left = b
     a.right = c
     b.left = d
     b.right = e
     c.left = f
     c.right = g
-    e.left = h
-    e.right = i
     tree = BinaryTree(a)
 
-    print(tree.get_height())
+    tree_dict = tree.serialize()
+    print(tree_dict)
+
+    with open('tree.json', 'w') as fp:
+        json.dump(tree_dict, fp)
+
+    tree2 = deserialize('tree.json')
+
+    tree2.level_scan()

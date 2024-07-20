@@ -1,4 +1,5 @@
 import math
+import random
 
 from disjoint_set import DisjointSet
 
@@ -335,6 +336,22 @@ def is_strobogrammatic(num: int):
     return num_str1 == num_str2
 
 
+def rand7():
+    """
+    Problem #403
+    Return randomly number between 1 to 7 using rand5
+    """
+
+    def rand5():
+        return random.randint(1, 5)
+
+    x = rand5() - 1  # x - [0, 4]
+    y = 6 * x  # y - [0, 24]
+    z = y // 4  # z - [0, 6]
+    w = z + 1  # w - [1, 7]
+    return w
+
+
 if __name__ == '__main__':
     # curr_pos = (0, 2)
     # coin_positions = [(0, 4), (1, 0), (2, 0), (3, 2)]
@@ -352,5 +369,7 @@ if __name__ == '__main__':
     # res = embolden('abcdefg', ['bcd', 'def'], 'b')
     # print(res)
 
-    res = compute_fewest_num_of_coins([1, 5, 10], 56)
-    print(res)
+    # res = compute_fewest_num_of_coins([1, 5, 10], 56)
+    # print(res)
+
+    print(rand7())

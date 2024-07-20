@@ -261,6 +261,80 @@ def find_largest_range(arr: list) -> tuple:
     return (start, end)
 
 
+def group_anagrams(arr: list):
+    """
+    problem: #395
+    T(n) = O(n)
+    S(n) = O(n)
+    :param arr:
+    :return:
+    """
+    d = dict()
+    for word in arr:
+        sorted_word = ''.join(sorted(word))
+        d[sorted_word] = []
+
+    for word in arr:
+        sorted_word = ''.join(sorted(word))
+        d[sorted_word].append(word)
+
+    return list(d.values())
+
+
+def preprocess(L: list):
+    A = [0] * len(L)
+    partial_sum = 0
+    for i in range(len(L)):
+        A[i] = partial_sum + L[i]
+        partial_sum += L[i]
+    return A
+
+
+def sum_smart(L: list, i: int, j: int):
+    """
+    Problem #400
+    """
+    if i - 1 < 0:
+        return L[j - 1]
+    return L[j - 1] - L[i - 1]
+
+
+def apply_permutation(arr: list, permute: list) -> list:
+    """
+    Problem #401
+    T(n) = O(n)
+    S(n) = O(1)
+    :param arr:
+    :param permute:
+    :return:
+    """
+    p = [arr[index] for index in permute]
+    return p
+
+
+def is_strobogrammatic(num: int):
+    """
+    Problem #402
+    :param num: number
+    :return: True/False if number equals to the rotated number bt 180 degress
+    """
+    rotated180dict = {
+        '0': '0',
+        '1': '1',
+        '2': '-',
+        '3': '-',
+        '4': '-',
+        '5': '-',
+        '6': '9',
+        '7': '-',
+        '8': '8',
+        '9': '6'
+    }
+    num_str1 = str(num)
+    num_str2 = ''.join([rotated180dict[digit] for digit in num_str1])[::-1]
+    return num_str1 == num_str2
+
+
 if __name__ == '__main__':
     # curr_pos = (0, 2)
     # coin_positions = [(0, 4), (1, 0), (2, 0), (3, 2)]

@@ -352,24 +352,78 @@ def rand7():
     return w
 
 
+def problem_507():
+    candidate_count_dict = {}
+    votes_dict = {}
+    lines = []
+    with open('voters_507.txt', 'r') as reader:
+        lines = reader.readlines()
+    for line in lines:
+        fields = line.split(',')
+        voter_id = fields[0]
+        candidate_id = fields[1].strip('\n')
+        if voter_id in votes_dict.keys():
+            print('Fraud')
+            return
+        votes_dict[voter_id] = candidate_id
+
+        if candidate_id in candidate_count_dict.keys():
+            candidate_count_dict[candidate_id] += 1
+        else:
+            candidate_count_dict[candidate_id] = 1
+
+    # print(candidate_count_dict)
+
+    # print(votes_dict)
+
+    candidate_ids = list(candidate_count_dict.keys())
+    # print(candidate_ids)
+
+    candidate_ids.sort(key=lambda candidate_id: candidate_count_dict[candidate_id], reverse=True)
+    # print(candidate_ids)
+
+    return candidate_ids[:3]
+
+
+def problem_505(arr: list, k: int):
+    n = len(arr)
+    for i in range(k):
+        # rotate one place right
+        right_most = arr[n - 1]
+        j = n - 1
+        while j >= 0:
+            arr[j] = arr[j - 1]
+            j -= 1
+        arr[0] = right_most
+
+    return arr
+
+
+def problem_500(mat, current, end):
+    # reached end
+    if current == end:
+        return 0
+
+    # visit tile
+    mat[current[0], current[1]] = ''
+
+    # go right
+    if current[0] + 1 < len(mat):
+        current = (current[0] + 1, current[1])
+        return 1 + problem_500(mat, current, end)
+
+
+
+
 if __name__ == '__main__':
-    # curr_pos = (0, 2)
-    # coin_positions = [(0, 4), (1, 0), (2, 0), (3, 2)]
-    # print(find_closest_coin(curr_pos, coin_positions))
+    mat = [
+        [False, False, False, False],
+        [True, True, False, True],
+        [False, False, False, False],
+        [False, False, False, False]
+    ]
+    start = (3, 0)
+    end = (0, 0)
+    problem_500(mat, start, end)
 
-    # results = gen_all_possible_subsequences('xyz')
-    # print(results)
-
-    # test_divide(1, 101)
-
-    # print(convert_hex_to_base64('Many'))
-
-    # res = embolden('abcxyz123', ['abc', '123'], 'b')
-    # res = embolden('aaabbcc', ['aaa', 'aab', 'bc'], 'b')
-    # res = embolden('abcdefg', ['bcd', 'def'], 'b')
-    # print(res)
-
-    # res = compute_fewest_num_of_coins([1, 5, 10], 56)
-    # print(res)
-
-    print(rand7())
+    print(res)

@@ -1,4 +1,5 @@
 class Vertex(object):
+
     def __init__(self, value: str):
         self.value = value
         self.visited = False
@@ -112,8 +113,8 @@ if __name__ == '__main__':
 
     G.show()
 
-    res = G.bfs(a)
-    print(res)
-
-    res = G.dfs(a)
-    print(res)
+    # res = G.bfs(a)
+    # print(res)
+    #
+    # res = G.dfs(a)
+    # print(res)

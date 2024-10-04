@@ -11,8 +11,8 @@ class ListNode:
 
 
 class List:
-    def __init__(self):
-        self.head = None
+    def __init__(self, head: ListNode = None):
+        self.head = head
 
     def __str__(self):
         s = '| -> '
@@ -22,6 +22,9 @@ class List:
             node = node.next
         s += '||'
         return s
+
+    def show(self):
+        print(str(self))
 
     def is_empty(self):
         return self.head is None
@@ -139,7 +142,7 @@ def generate_list(values: list):
     last_node = None
     for i in values:
         head, last_node = append_to_node(head, last_node, i)
-    return head
+    return List(head)
 
 
 def test_heap():
@@ -151,11 +154,12 @@ def test_heap():
 
 
 if __name__ == '__main__':
-    head1 = generate_list([1, 4, 5])
-    head2 = generate_list([1, 3, 4])
-    head3 = generate_list([2, 6])
-
-    lists = [head1, head2, head3]
-
-    head = mergeKLists(lists)
-    print_list(head)
+    pass
+    # head1 = generate_list([1, 4, 5])
+    # head2 = generate_list([1, 3, 4])
+    # head3 = generate_list([2, 6])
+    #
+    # lists = [head1, head2, head3]
+    #
+    # head = mergeKLists(lists)
+    # print_list(head)

@@ -2,6 +2,7 @@ import math
 import random
 
 from disjoint_set import DisjointSet
+from linked_list import *
 
 
 def calc_manhattan_distance(pos1: tuple, pos2: tuple) -> int:
@@ -413,17 +414,69 @@ def problem_500(mat, current, end):
         return 1 + problem_500(mat, current, end)
 
 
+def find_intersection_node_problem_517(list1: List, list2: List):
+    """
+    idea: reverse both lists.Then scan both lists from first node and
+    find first node that differs. We return one node before it.
+    """
+    list1.reverse()
+    list2.reverse()
+    node1 = list1.head
+    node2 = list2.head
+    prev = None
+    while node1 is not None and node1.val == node2.val:
+        prev = node1
+        node1 = node1.next
+        node2 = node2.next
+    if prev is None:
+        return None
+    return prev.val
+
+
+def problem_516(n: int) -> int:
+    """
+    find nth seventh number
+    7^n
+    1 7 (1+7) 49 (1+7+49) 343 (1+7+49+343)
+    if n is odd -> return sum of squares till n//2
+    if n is even -> return 7 ^ (n//2)
+    """
+    if n == 1:
+        return 1
+    if n == 2:
+        return 7
+    sum_squares = 1
+    x = 7
+    if n % 2 == 1:
+        for i in range(n // 2):
+            sum_squares += x
+            x *= 7
+        return sum_squares
+    else:
+        return 7 ** (n // 2)
 
 
 if __name__ == '__main__':
-    mat = [
-        [False, False, False, False],
-        [True, True, False, True],
-        [False, False, False, False],
-        [False, False, False, False]
-    ]
-    start = (3, 0)
-    end = (0, 0)
-    problem_500(mat, start, end)
+    print('main')
+    # mat = [
+    #     [False, False, False, False],
+    #     [True, True, False, True],
+    #     [False, False, False, False],
+    #     [False, False, False, False]
+    # ]
+    # start = (3, 0)
+    # end = (0, 0)
+    # problem_500(mat, start, end)
+    #
+    # print(res)
 
-    print(res)
+    # list1 = generate_list([3, 7, 8, 10])
+    # list2 = generate_list([99, 1, 8, 10])
+    # list1.show()
+    # list2.show()
+    # res = find_intersection_node_problem_517(list1, list2)
+    # print(res)
+
+    for n in range(1, 10):
+        res = problem_516(n)
+        print(f'{n}: {res}')

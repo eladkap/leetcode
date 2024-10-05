@@ -1,3 +1,6 @@
+import math
+
+
 class Vector:
     def __init__(self, x, y, z):
         self._x = x
@@ -29,11 +32,17 @@ class Vector:
         return self
 
     def __cmp__(self, other):
-        pass
+        return self._x == other._x and self._y == other._y and self._z == other._z
+
+    def __neg__(self):
+        return Vector(-self._x, -self._y, -self._z)
+
+    def __abs__(self):
+        return math.sqrt(self._x ** 2 + self._y ** 2 + self._z ** 2)
 
 
 if __name__ == '__main__':
-    A = Vector(1, 2, 3)
+    A = Vector(1, 4, 8)
     B = Vector(2, 4, 6)
 
     print(f'A = {A}')
@@ -44,3 +53,11 @@ if __name__ == '__main__':
 
     D = A ** 2
     print(D)
+
+    print(A == B)
+
+    Am = -A
+    print(Am)
+
+    print(abs(A))
+    print(abs(Am))

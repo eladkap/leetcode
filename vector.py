@@ -1,30 +1,31 @@
 class Vector:
-    def __init__(self, size=0):
-        if size == 0:
-            self._arr = []
-        else:
-            self._arr = [0] * size
+    def __init__(self, x, y, z):
+        self._x = x
+        self._y = y
+        self._z = z
 
     def __str__(self):
-        return '[' + ' '.join(str(x) for x in self._arr) + ']'
+        return f'({self._x},{self._y},{self._z})'
 
     def __add__(self, other):
-        v = Vector()
-        for x in self._arr + other._arr:
-            v._arr.append(x)
-        return v
+        return Vector(self._x + other._x, self._y + other._y, self._z + other._z)
 
     def __sub__(self, other):
-        pass
+        return Vector(self._x - other._x, self._y - other._y, self._z - other._z)
 
-    def __pow__(self, power):
-        B = Vector(len(self._arr))
-        for i in range(len(self._arr)):
-            B._arr[i] = self._arr[i] ** power
-        return B
+    def __pow__(self, p):
+        return Vector(self._x ** p, self._y ** p, self._z ** p)
 
-    def __iadd__(self, x):
-        self._arr.append(x)
+    def __iadd__(self, value):
+        self._x += value
+        self._y += value
+        self._z += value
+        return self
+
+    def __isub__(self, value):
+        self._x -= value
+        self._y -= value
+        self._z -= value
         return self
 
     def __cmp__(self, other):
@@ -32,13 +33,14 @@ class Vector:
 
 
 if __name__ == '__main__':
-    A = Vector()
-    B = Vector(size=8)
+    A = Vector(1, 2, 3)
+    B = Vector(2, 4, 6)
 
-    for x in range(1, 11):
-        A += x
+    print(f'A = {A}')
+    print(f'B = {B}')
 
-    print(A)
-    A2 = A ** 2
+    C = A + B
+    print(C)
 
-    print(A2)
+    D = A ** 2
+    print(D)

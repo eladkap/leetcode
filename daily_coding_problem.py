@@ -456,6 +456,53 @@ def problem_516(n: int) -> int:
         return 7 ** (n // 2)
 
 
+def two_sum(arr: list, k: int):
+    d = {}
+    for i in range(len(arr)):
+        x = arr[i]
+        y = k - x
+        if y in d.keys():
+            return [x, y]
+        d[x] = y
+    return None
+
+
+def two_sum_2(arr: list, k: int):
+    """
+    idea: array arr is sorted.
+    Use two pointers from start and end
+    if sum is too high go with low pointer.
+    if sum is too low go with high pointer.
+    """
+    low = 0
+    high = len(arr) - 1
+    while low < high:
+        if arr[low] + arr[high] == k:
+            return [arr[low], arr[high]]
+        if arr[low] + arr[high] < k:
+            low += 1
+        else:
+            high -= 1
+    return None
+
+
+def problem_518(arr: list, k: int):
+    """
+    determine if there 3 numbers in array arr that sum up to k (3-sum problem)
+    For every number A[i] in the array do the following:
+    - create empty dictionary
+    - find 2 numbers in the array that sum up to k-A[i] (2-sum problem)
+    """
+    arr.sort()
+    for i in range(len(arr)):
+        x = arr[i]
+        # res = two_sum(arr, k - x)
+        res = two_sum_2(arr, k - x)
+        if res is not None:
+            return [x] + res
+    return None
+
+
 if __name__ == '__main__':
     print('main')
     # mat = [
@@ -477,6 +524,9 @@ if __name__ == '__main__':
     # res = find_intersection_node_problem_517(list1, list2)
     # print(res)
 
-    for n in range(1, 10):
-        res = problem_516(n)
-        print(f'{n}: {res}')
+    arr = [20, 303, 3, 4, 25]
+    arr.sort()
+    print(arr)
+    k = 49
+    res = problem_518(arr, k)
+    print(res)
